@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * External function: read the dates of a course.
@@ -31,7 +31,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_editdates\local\date_collector;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Return every addressable date of a course.
@@ -72,8 +71,11 @@ final class get_course_dates extends external_api {
      * @param bool $includeinvisible Whether to include hidden items.
      * @return array
      */
-    public static function execute(int $courseid, string $activitytype = '',
-            bool $includeinvisible = false): array {
+    public static function execute(
+        int $courseid,
+        string $activitytype = '',
+        bool $includeinvisible = false
+    ): array {
         global $DB;
 
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -104,14 +106,22 @@ final class get_course_dates extends external_api {
             'shortname' => new external_value(PARAM_TEXT, 'Course short name'),
             'fullname' => new external_value(PARAM_TEXT, 'Course full name'),
             'format' => new external_value(PARAM_PLUGIN, 'Course format, e.g. weeks or topics'),
-            'servertime' => new external_value(PARAM_INT,
-                'Server time when the report was built; use it as the reference for relative dates'),
-            'timezone' => new external_value(PARAM_TIMEZONE,
-                'Site timezone, e.g. Europe/Vienna; the zone the stored timestamps are shown in'),
-            'enableavailability' => new external_value(PARAM_BOOL,
-                'Whether restricted access is enabled on this site'),
-            'enablecompletion' => new external_value(PARAM_BOOL,
-                'Whether completion tracking is enabled in this course'),
+            'servertime' => new external_value(
+                PARAM_INT,
+                'Server time when the report was built; use it as the reference for relative dates'
+            ),
+            'timezone' => new external_value(
+                PARAM_TIMEZONE,
+                'Site timezone, e.g. Europe/Vienna; the zone the stored timestamps are shown in'
+            ),
+            'enableavailability' => new external_value(
+                PARAM_BOOL,
+                'Whether restricted access is enabled on this site'
+            ),
+            'enablecompletion' => new external_value(
+                PARAM_BOOL,
+                'Whether completion tracking is enabled in this course'
+            ),
             'course' => new external_single_structure([
                 'canedit' => new external_value(PARAM_BOOL, 'Whether the caller may update the course'),
                 'dates' => new external_multiple_structure(structures::date()),
@@ -121,25 +131,35 @@ final class get_course_dates extends external_api {
                 'sectionnum' => new external_value(PARAM_INT, 'Position of the section in the course'),
                 'name' => new external_value(PARAM_TEXT, 'Section name'),
                 'visible' => new external_value(PARAM_BOOL, 'Whether the section is visible'),
-                'canedit' => new external_value(PARAM_BOOL,
-                    'Whether this API may write the section dates'),
-                'hasotherrestrictions' => new external_value(PARAM_BOOL,
-                    'Whether the section has access restrictions other than dates'),
+                'canedit' => new external_value(
+                    PARAM_BOOL,
+                    'Whether this API may write the section dates'
+                ),
+                'hasotherrestrictions' => new external_value(
+                    PARAM_BOOL,
+                    'Whether the section has access restrictions other than dates'
+                ),
                 'dates' => new external_multiple_structure(structures::date()),
             ])),
             'activities' => new external_multiple_structure(new external_single_structure([
                 'cmid' => new external_value(PARAM_INT, 'Course module id, used as the target id'),
                 'modname' => new external_value(PARAM_PLUGIN, 'Module name, e.g. quiz'),
                 'instance' => new external_value(PARAM_INT, 'Module instance id'),
-                'idnumber' => new external_value(PARAM_RAW,
-                    'Activity ID number, empty when unset; usable as an ownership marker'),
+                'idnumber' => new external_value(
+                    PARAM_RAW,
+                    'Activity ID number, empty when unset; usable as an ownership marker'
+                ),
                 'name' => new external_value(PARAM_TEXT, 'Activity name'),
                 'sectionnum' => new external_value(PARAM_INT, 'Section the activity is in'),
                 'visible' => new external_value(PARAM_BOOL, 'Whether the activity is visible'),
-                'canedit' => new external_value(PARAM_BOOL,
-                    'Whether the caller may manage this activity'),
-                'hasotherrestrictions' => new external_value(PARAM_BOOL,
-                    'Whether the activity has access restrictions other than dates'),
+                'canedit' => new external_value(
+                    PARAM_BOOL,
+                    'Whether the caller may manage this activity'
+                ),
+                'hasotherrestrictions' => new external_value(
+                    PARAM_BOOL,
+                    'Whether the activity has access restrictions other than dates'
+                ),
                 'dates' => new external_multiple_structure(structures::date()),
             ])),
             'warnings' => new external_multiple_structure(new external_single_structure([

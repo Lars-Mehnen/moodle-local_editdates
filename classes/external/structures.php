@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Shared return structures of the local_editdates web services.
@@ -28,7 +28,6 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Return structures reused by the read and the write functions.
@@ -44,22 +43,38 @@ final class structures {
      */
     public static function date(): external_single_structure {
         return new external_single_structure([
-            'key' => new external_value(PARAM_ALPHANUMEXT,
-                'Address key of this date, e.g. duedate, timeclose, availablefrom'),
-            'label' => new external_value(PARAM_TEXT,
-                'Label in the response language; use key for automation'),
-            'value' => new external_value(PARAM_INT,
-                'Unix timestamp, 0 when the date is not set'),
-            'source' => new external_value(PARAM_ALPHA,
-                'Where the date is stored: course, module, completion or availability'),
-            'type' => new external_value(PARAM_ALPHA,
-                'date when only the day is used, datetime when the time matters'),
-            'optional' => new external_value(PARAM_BOOL,
-                'Whether 0 (switched off) is an accepted value'),
-            'editable' => new external_value(PARAM_BOOL,
-                'Whether this API may write the date'),
-            'reason' => new external_value(PARAM_ALPHANUMEXT,
-                'Why the date is not editable, empty when it is'),
+            'key' => new external_value(
+                PARAM_ALPHANUMEXT,
+                'Address key of this date, e.g. duedate, timeclose, availablefrom'
+            ),
+            'label' => new external_value(
+                PARAM_TEXT,
+                'Label in the response language; use key for automation'
+            ),
+            'value' => new external_value(
+                PARAM_INT,
+                'Unix timestamp, 0 when the date is not set'
+            ),
+            'source' => new external_value(
+                PARAM_ALPHA,
+                'Where the date is stored: course, module, completion or availability'
+            ),
+            'type' => new external_value(
+                PARAM_ALPHA,
+                'date when only the day is used, datetime when the time matters'
+            ),
+            'optional' => new external_value(
+                PARAM_BOOL,
+                'Whether 0 (switched off) is an accepted value'
+            ),
+            'editable' => new external_value(
+                PARAM_BOOL,
+                'Whether this API may write the date'
+            ),
+            'reason' => new external_value(
+                PARAM_ALPHANUMEXT,
+                'Why the date is not editable, empty when it is'
+            ),
         ]);
     }
 
@@ -77,12 +92,18 @@ final class structures {
             'name' => new external_value(PARAM_TEXT, 'Name of the course, section or activity'),
             'oldvalue' => new external_value(PARAM_INT, 'Timestamp before the change'),
             'newvalue' => new external_value(PARAM_INT, 'Requested timestamp'),
-            'status' => new external_value(PARAM_ALPHA,
-                'planned (dry run), applied, unchanged or error'),
-            'code' => new external_value(PARAM_ALPHANUMEXT,
-                'Machine readable reason for a rejected change, empty otherwise'),
-            'message' => new external_value(PARAM_TEXT,
-                'Human readable reason for a rejected change, empty otherwise'),
+            'status' => new external_value(
+                PARAM_ALPHA,
+                'planned (dry run), applied, unchanged or error'
+            ),
+            'code' => new external_value(
+                PARAM_ALPHANUMEXT,
+                'Machine readable reason for a rejected change, empty otherwise'
+            ),
+            'message' => new external_value(
+                PARAM_TEXT,
+                'Human readable reason for a rejected change, empty otherwise'
+            ),
         ]);
     }
 
@@ -108,8 +129,10 @@ final class structures {
     public static function write_result(): external_single_structure {
         return new external_single_structure([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
-            'dryrun' => new external_value(PARAM_BOOL,
-                'True when nothing was written and the changes are a preview'),
+            'dryrun' => new external_value(
+                PARAM_BOOL,
+                'True when nothing was written and the changes are a preview'
+            ),
             'summary' => self::summary(),
             'changes' => new external_multiple_structure(self::change()),
         ]);

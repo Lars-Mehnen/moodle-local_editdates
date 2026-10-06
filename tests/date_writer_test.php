@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Tests for planning and applying date changes.
@@ -31,6 +31,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Tests for planning and applying date changes.
+ */
 #[CoversClass(date_writer::class)]
 final class date_writer_test extends \advanced_testcase {
     /** @var \stdClass Course used by the tests. */
@@ -83,8 +86,12 @@ final class date_writer_test extends \advanced_testcase {
             'allowsubmissionsfromdate' => strtotime('2026-10-12 08:00'),
             'duedate' => strtotime('2026-10-19 23:59'),
         ]);
-        $this->section = $DB->get_record('course_sections',
-            ['course' => $this->course->id, 'section' => 2], '*', MUST_EXIST);
+        $this->section = $DB->get_record(
+            'course_sections',
+            ['course' => $this->course->id, 'section' => 2],
+            '*',
+            MUST_EXIST
+        );
     }
 
     /**
@@ -116,8 +123,10 @@ final class date_writer_test extends \advanced_testcase {
         $this->assertSame(date_writer::STATUS_PLANNED, $changes[0]['status']);
         $this->assertSame(strtotime('2026-11-09 23:59'), $changes[0]['oldvalue']);
         $this->assertSame($new, $changes[0]['newvalue']);
-        $this->assertSame(strtotime('2026-11-09 23:59'),
-            (int) $DB->get_field('quiz', 'timeclose', ['id' => $this->quiz->id]));
+        $this->assertSame(
+            strtotime('2026-11-09 23:59'),
+            (int) $DB->get_field('quiz', 'timeclose', ['id' => $this->quiz->id])
+        );
     }
 
     /**
@@ -152,8 +161,10 @@ final class date_writer_test extends \advanced_testcase {
         ]));
 
         $this->assertSame(date_writer::STATUS_APPLIED, $changes[0]['status']);
-        $this->assertSame($new,
-            (int) $DB->get_field('course_modules', 'completionexpected', ['id' => $this->quiz->cmid]));
+        $this->assertSame(
+            $new,
+            (int) $DB->get_field('course_modules', 'completionexpected', ['id' => $this->quiz->cmid])
+        );
     }
 
     /**
@@ -164,8 +175,12 @@ final class date_writer_test extends \advanced_testcase {
 
         $writer = new date_writer($this->course);
         $changes = $writer->plan([
-            $this->update(date_collector::TARGET_MODULE, $this->assign->cmid, 'duedate',
-                strtotime('2026-10-01 08:00')),
+            $this->update(
+                date_collector::TARGET_MODULE,
+                $this->assign->cmid,
+                'duedate',
+                strtotime('2026-10-01 08:00')
+            ),
         ]);
 
         $this->assertSame(date_writer::STATUS_ERROR, $changes[0]['status']);
@@ -173,8 +188,10 @@ final class date_writer_test extends \advanced_testcase {
         $this->assertNotSame('', $changes[0]['message']);
 
         $writer->apply($changes);
-        $this->assertSame(strtotime('2026-10-19 23:59'),
-            (int) $DB->get_field('assign', 'duedate', ['id' => $this->assign->id]));
+        $this->assertSame(
+            strtotime('2026-10-19 23:59'),
+            (int) $DB->get_field('assign', 'duedate', ['id' => $this->assign->id])
+        );
     }
 
     /**
@@ -213,8 +230,12 @@ final class date_writer_test extends \advanced_testcase {
     public function test_plan_detects_unchanged_values(): void {
         $writer = new date_writer($this->course);
         $changes = $writer->plan([
-            $this->update(date_collector::TARGET_MODULE, $this->quiz->cmid, 'timeclose',
-                strtotime('2026-11-09 23:59')),
+            $this->update(
+                date_collector::TARGET_MODULE,
+                $this->quiz->cmid,
+                'timeclose',
+                strtotime('2026-11-09 23:59')
+            ),
         ]);
         $this->assertSame(date_writer::STATUS_UNCHANGED, $changes[0]['status']);
     }
@@ -237,7 +258,8 @@ final class date_writer_test extends \advanced_testcase {
             $this->assertSame(date_writer::STATUS_APPLIED, $change['status']);
         }
         $state = availability::read(
-            $DB->get_field('course_sections', 'availability', ['id' => $this->section->id]));
+            $DB->get_field('course_sections', 'availability', ['id' => $this->section->id])
+        );
         $this->assertSame($from, $state['from']);
         $this->assertSame($until, $state['until']);
     }
@@ -248,10 +270,18 @@ final class date_writer_test extends \advanced_testcase {
     public function test_plan_rejects_inverted_availability_window(): void {
         $writer = new date_writer($this->course);
         $changes = $writer->plan([
-            $this->update(date_collector::TARGET_SECTION, $this->section->id,
-                availability::KEY_FROM, strtotime('2026-12-01 00:00')),
-            $this->update(date_collector::TARGET_SECTION, $this->section->id,
-                availability::KEY_UNTIL, strtotime('2026-11-01 00:00')),
+            $this->update(
+                date_collector::TARGET_SECTION,
+                $this->section->id,
+                availability::KEY_FROM,
+                strtotime('2026-12-01 00:00')
+            ),
+            $this->update(
+                date_collector::TARGET_SECTION,
+                $this->section->id,
+                availability::KEY_UNTIL,
+                strtotime('2026-11-01 00:00')
+            ),
         ]);
         foreach ($changes as $change) {
             $this->assertSame(date_writer::STATUS_ERROR, $change['status']);
@@ -277,12 +307,18 @@ final class date_writer_test extends \advanced_testcase {
         $this->assertNotContains('module:cutoffdate', $keys);
         $this->assertContains('course:startdate', $keys);
 
-        $this->assertSame(strtotime('2026-11-16 23:59'),
-            (int) $DB->get_field('quiz', 'timeclose', ['id' => $this->quiz->id]));
-        $this->assertSame(strtotime('2026-10-26 23:59'),
-            (int) $DB->get_field('assign', 'duedate', ['id' => $this->assign->id]));
-        $this->assertSame(strtotime('2026-10-12 08:00'),
-            (int) $DB->get_field('course', 'startdate', ['id' => $this->course->id]));
+        $this->assertSame(
+            strtotime('2026-11-16 23:59'),
+            (int) $DB->get_field('quiz', 'timeclose', ['id' => $this->quiz->id])
+        );
+        $this->assertSame(
+            strtotime('2026-10-26 23:59'),
+            (int) $DB->get_field('assign', 'duedate', ['id' => $this->assign->id])
+        );
+        $this->assertSame(
+            strtotime('2026-10-12 08:00'),
+            (int) $DB->get_field('course', 'startdate', ['id' => $this->course->id])
+        );
     }
 
     /**
@@ -294,7 +330,9 @@ final class date_writer_test extends \advanced_testcase {
         $writer = new date_writer($this->course);
         $calendardays = $this->shift_value($writer->plan_shift(WEEKSECS, [2], ['assign']), 'duedate');
         $literal = $this->shift_value(
-            $writer->plan_shift(WEEKSECS, [2], ['assign'], false, true, false), 'duedate');
+            $writer->plan_shift(WEEKSECS, [2], ['assign'], false, true, false),
+            'duedate'
+        );
 
         $this->assertSame(strtotime('2026-10-26 23:59'), $calendardays);
         $this->assertSame(strtotime('2026-10-19 23:59') + WEEKSECS, $literal);

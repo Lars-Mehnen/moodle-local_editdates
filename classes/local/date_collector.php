@@ -24,7 +24,6 @@
 
 namespace local_editdates\local;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Read model for the course dates API.
@@ -125,10 +124,26 @@ final class date_collector {
         return [
             'canedit' => $canedit,
             'dates' => [
-                $this->date('startdate', get_string('startdate'), (int) $this->course->startdate,
-                    self::SOURCE_COURSE, 'datetime', false, $canedit, $reason),
-                $this->date('enddate', get_string('enddate'), (int) $this->course->enddate,
-                    self::SOURCE_COURSE, 'datetime', true, $canedit, $reason),
+                $this->date(
+                    'startdate',
+                    get_string('startdate'),
+                    (int) $this->course->startdate,
+                    self::SOURCE_COURSE,
+                    'datetime',
+                    false,
+                    $canedit,
+                    $reason
+                ),
+                $this->date(
+                    'enddate',
+                    get_string('enddate'),
+                    (int) $this->course->enddate,
+                    self::SOURCE_COURSE,
+                    'datetime',
+                    true,
+                    $canedit,
+                    $reason
+                ),
             ],
         ];
     }
@@ -179,10 +194,26 @@ final class date_collector {
                 'canedit' => $editable,
                 'hasotherrestrictions' => $this->has_other_restrictions($section->availability),
                 'dates' => [
-                    $this->date(availability::KEY_FROM, get_string('availablefrom', 'local_editdates'),
-                        $state['from'], self::SOURCE_AVAILABILITY, 'datetime', true, $editable, $reason),
-                    $this->date(availability::KEY_UNTIL, get_string('availableuntil', 'local_editdates'),
-                        $state['until'], self::SOURCE_AVAILABILITY, 'datetime', true, $editable, $reason),
+                    $this->date(
+                        availability::KEY_FROM,
+                        get_string('availablefrom', 'local_editdates'),
+                        $state['from'],
+                        self::SOURCE_AVAILABILITY,
+                        'datetime',
+                        true,
+                        $editable,
+                        $reason
+                    ),
+                    $this->date(
+                        availability::KEY_UNTIL,
+                        get_string('availableuntil', 'local_editdates'),
+                        $state['until'],
+                        self::SOURCE_AVAILABILITY,
+                        'datetime',
+                        true,
+                        $editable,
+                        $reason
+                    ),
                 ],
             ];
         }
@@ -220,8 +251,10 @@ final class date_collector {
                     continue;
                 }
 
-                $canedit = has_capability('moodle/course:manageactivities',
-                    \context_module::instance($cm->id));
+                $canedit = has_capability(
+                    'moodle/course:manageactivities',
+                    \context_module::instance($cm->id)
+                );
                 $dates = $this->collect_module_dates($cm, $canedit, $hasavailability, $hascompletion);
                 if (!$dates) {
                     continue;
@@ -304,10 +337,26 @@ final class date_collector {
             $state = availability::read($cm->availability);
             $editable = $canedit && $state['editable'];
             $reason = $editable ? '' : ($canedit ? $state['reason'] : 'nopermission');
-            $dates[] = $this->date(availability::KEY_FROM, get_string('availablefrom', 'local_editdates'),
-                $state['from'], self::SOURCE_AVAILABILITY, 'datetime', true, $editable, $reason);
-            $dates[] = $this->date(availability::KEY_UNTIL, get_string('availableuntil', 'local_editdates'),
-                $state['until'], self::SOURCE_AVAILABILITY, 'datetime', true, $editable, $reason);
+            $dates[] = $this->date(
+                availability::KEY_FROM,
+                get_string('availablefrom', 'local_editdates'),
+                $state['from'],
+                self::SOURCE_AVAILABILITY,
+                'datetime',
+                true,
+                $editable,
+                $reason
+            );
+            $dates[] = $this->date(
+                availability::KEY_UNTIL,
+                get_string('availableuntil', 'local_editdates'),
+                $state['until'],
+                self::SOURCE_AVAILABILITY,
+                'datetime',
+                true,
+                $editable,
+                $reason
+            );
         }
 
         return $dates;

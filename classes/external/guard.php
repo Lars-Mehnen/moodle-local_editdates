@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Batch limits and audit logging for the write functions.
@@ -27,7 +27,6 @@ namespace local_editdates\external;
 use local_editdates\event\dates_updated;
 use local_editdates\local\change_report;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Guards around the write path.
@@ -51,8 +50,12 @@ final class guard {
     public static function check_batch_size(int $count): void {
         $max = (int) (get_config('local_editdates', 'maxupdates') ?: self::DEFAULT_MAX_UPDATES);
         if ($count > $max) {
-            throw new \moodle_exception('errortoomanyupdates', 'local_editdates', '',
-                (object) ['count' => $count, 'max' => $max]);
+            throw new \moodle_exception(
+                'errortoomanyupdates',
+                'local_editdates',
+                '',
+                (object) ['count' => $count, 'max' => $max]
+            );
         }
     }
 
@@ -66,8 +69,12 @@ final class guard {
             ?: self::DEFAULT_MAX_SHIFT_DAYS);
         $maxseconds = $maxdays * DAYSECS;
         if (abs($offsetseconds) > $maxseconds) {
-            throw new \moodle_exception('erroroffsettoolarge', 'local_editdates', '',
-                (object) ['days' => round($offsetseconds / DAYSECS, 1), 'max' => $maxdays]);
+            throw new \moodle_exception(
+                'erroroffsettoolarge',
+                'local_editdates',
+                '',
+                (object) ['days' => round($offsetseconds / DAYSECS, 1), 'max' => $maxdays]
+            );
         }
     }
 

@@ -24,7 +24,6 @@
 
 namespace local_editdates\local;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Helper for the "available from" / "available until" dates of sections and activities.
@@ -95,8 +94,10 @@ final class availability {
             $result['reason'] = 'notandavailability';
         }
 
-        if ($result['editable']
-                && ($seen[self::DIRECTION_FROM] > 1 || $seen[self::DIRECTION_UNTIL] > 1)) {
+        if (
+            $result['editable']
+                && ($seen[self::DIRECTION_FROM] > 1 || $seen[self::DIRECTION_UNTIL] > 1)
+        ) {
             $result['editable'] = false;
             $result['reason'] = 'duplicatedateavailability';
         }

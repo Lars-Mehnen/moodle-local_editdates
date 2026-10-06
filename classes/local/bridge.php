@@ -24,7 +24,6 @@
 
 namespace local_editdates\local;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Thin bridge to report_editdates.

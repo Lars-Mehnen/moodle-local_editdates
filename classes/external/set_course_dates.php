@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * External function: set individual course dates.
@@ -32,7 +32,6 @@ use core_external\external_value;
 use local_editdates\local\change_report;
 use local_editdates\local\date_writer;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Set individual dates of a course.
@@ -53,11 +52,15 @@ final class set_course_dates extends external_api {
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'updates' => new external_multiple_structure(new external_single_structure([
                 'target' => new external_value(PARAM_ALPHA, 'course, section or module'),
-                'id' => new external_value(PARAM_INT,
-                    'Section id for section, course module id for module, 0 for course'),
+                'id' => new external_value(
+                    PARAM_INT,
+                    'Section id for section, course module id for module, 0 for course'
+                ),
                 'key' => new external_value(PARAM_ALPHANUMEXT, 'Address key of the date'),
-                'value' => new external_value(PARAM_INT,
-                    'New Unix timestamp, or 0 to switch an optional date off'),
+                'value' => new external_value(
+                    PARAM_INT,
+                    'New Unix timestamp, or 0 to switch an optional date off'
+                ),
             ]), 'Dates to set'),
             'dryrun' => new external_value(
                 PARAM_BOOL,

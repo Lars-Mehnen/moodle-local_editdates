@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Tests for the course date read model.
@@ -29,6 +29,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Tests for the course date read model.
+ */
 #[CoversClass(date_collector::class)]
 final class date_collector_test extends \advanced_testcase {
     /** @var \stdClass Course used by the tests. */
@@ -74,8 +77,12 @@ final class date_collector_test extends \advanced_testcase {
         ]);
 
         // A section with a date condition next to a foreign condition.
-        $section = $DB->get_record('course_sections',
-            ['course' => $this->course->id, 'section' => 2], '*', MUST_EXIST);
+        $section = $DB->get_record(
+            'course_sections',
+            ['course' => $this->course->id, 'section' => 2],
+            '*',
+            MUST_EXIST
+        );
         $DB->set_field('course_sections', 'availability', json_encode([
             'op' => '&',
             'c' => [

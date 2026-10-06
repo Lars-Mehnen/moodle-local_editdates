@@ -24,7 +24,6 @@
 
 namespace local_editdates\event;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Course dates updated through the web service API.

@@ -24,7 +24,6 @@
 
 namespace local_editdates\local;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Write model for the course dates API.
@@ -90,14 +89,32 @@ final class date_writer {
 
             $entry = $this->find_date($model, $target, $id, $key);
             if ($entry === null) {
-                $changes[] = $this->change($target, $id, $key, '', '', 0, $value,
-                    self::STATUS_ERROR, 'unknowndate');
+                $changes[] = $this->change(
+                    $target,
+                    $id,
+                    $key,
+                    '',
+                    '',
+                    0,
+                    $value,
+                    self::STATUS_ERROR,
+                    'unknowndate'
+                );
                 continue;
             }
             [$owner, $date] = $entry;
 
-            $change = $this->change($target, $id, $key, $date['label'], $owner['name'],
-                (int) $date['value'], $value, self::STATUS_PLANNED, '');
+            $change = $this->change(
+                $target,
+                $id,
+                $key,
+                $date['label'],
+                $owner['name'],
+                (int) $date['value'],
+                $value,
+                self::STATUS_PLANNED,
+                ''
+            );
 
             if ($value < 0) {
                 $change['status'] = self::STATUS_ERROR;
@@ -305,8 +322,10 @@ final class date_writer {
                     $record->completionexpected = $values['completionexpected'];
                     $updatecm = true;
                 }
-                if (array_key_exists(availability::KEY_FROM, $values)
-                        || array_key_exists(availability::KEY_UNTIL, $values)) {
+                if (
+                    array_key_exists(availability::KEY_FROM, $values)
+                        || array_key_exists(availability::KEY_UNTIL, $values)
+                ) {
                     $current = availability::read($cm->availability);
                     $record->availability = availability::write(
                         $cm->availability,
@@ -390,11 +409,21 @@ final class date_writer {
             $startdate = $coursevalues['startdate'] ?? (int) $this->course->startdate;
             $enddate = $coursevalues['enddate'] ?? (int) $this->course->enddate;
             if ($enddate > 0 && $startdate > 0 && $enddate < $startdate) {
-                $changes = $this->reject($changes, date_collector::TARGET_COURSE, 0,
-                    array_keys($coursevalues), 'enddatebeforestartdate');
+                $changes = $this->reject(
+                    $changes,
+                    date_collector::TARGET_COURSE,
+                    0,
+                    array_keys($coursevalues),
+                    'enddatebeforestartdate'
+                );
             } else if ($startdate <= 0) {
-                $changes = $this->reject($changes, date_collector::TARGET_COURSE, 0,
-                    array_keys($coursevalues), 'nostartdate');
+                $changes = $this->reject(
+                    $changes,
+                    date_collector::TARGET_COURSE,
+                    0,
+                    array_keys($coursevalues),
+                    'nostartdate'
+                );
             }
         }
 
@@ -402,8 +431,10 @@ final class date_writer {
         foreach ([date_collector::TARGET_SECTION, date_collector::TARGET_MODULE] as $target) {
             foreach ($this->target_ids($changes, $target, true) as $id) {
                 $values = $this->collect_values($changes, $target, $id, true);
-                $keys = array_intersect_key($values,
-                    [availability::KEY_FROM => 1, availability::KEY_UNTIL => 1]);
+                $keys = array_intersect_key(
+                    $values,
+                    [availability::KEY_FROM => 1, availability::KEY_UNTIL => 1]
+                );
                 if (!$keys) {
                     continue;
                 }
@@ -453,8 +484,14 @@ final class date_writer {
                 // Reject the requested date the module complains about; when the
                 // complaint is about an untouched date, reject what was requested.
                 $reject = in_array($key, $requested, true) ? [$key] : $requested;
-                $changes = $this->reject($changes, date_collector::TARGET_MODULE, $cmid,
-                    $reject, 'modulevalidation', (string) $message);
+                $changes = $this->reject(
+                    $changes,
+                    date_collector::TARGET_MODULE,
+                    $cmid,
+                    $reject,
+                    'modulevalidation',
+                    (string) $message
+                );
             }
         }
 
@@ -472,8 +509,14 @@ final class date_writer {
      * @param string $message Human readable reason, defaults to the string for $code.
      * @return array
      */
-    private function reject(array $changes, string $target, int $id, array $keys,
-            string $code, string $message = ''): array {
+    private function reject(
+        array $changes,
+        string $target,
+        int $id,
+        array $keys,
+        string $code,
+        string $message = ''
+    ): array {
         foreach ($changes as &$change) {
             if ($change['status'] !== self::STATUS_PLANNED) {
                 continue;
@@ -635,8 +678,17 @@ final class date_writer {
      * @param string $code Machine readable reason, '' when there is none.
      * @return array
      */
-    private function change(string $target, int $id, string $key, string $label, string $name,
-            int $oldvalue, int $newvalue, string $status, string $code): array {
+    private function change(
+        string $target,
+        int $id,
+        string $key,
+        string $label,
+        string $name,
+        int $oldvalue,
+        int $newvalue,
+        string $status,
+        string $code
+    ): array {
         return [
             'target' => $target,
             'id' => $id,

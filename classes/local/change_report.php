@@ -24,7 +24,6 @@
 
 namespace local_editdates\local;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Counts the outcomes of a plan so a caller can branch without walking the list.

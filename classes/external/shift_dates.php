@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * External function: shift the dates of a course.
@@ -32,7 +32,6 @@ use core_external\external_value;
 use local_editdates\local\change_report;
 use local_editdates\local\date_writer;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Move every date of a course by a fixed offset.
@@ -50,8 +49,10 @@ final class shift_dates extends external_api {
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'offsetseconds' => new external_value(PARAM_INT,
-                'Offset in seconds, negative to move dates earlier'),
+            'offsetseconds' => new external_value(
+                PARAM_INT,
+                'Offset in seconds, negative to move dates earlier'
+            ),
             'sectionnums' => new external_multiple_structure(
                 new external_value(PARAM_INT, 'Section number'),
                 'Restrict to these section numbers, empty for the whole course',
@@ -64,17 +65,31 @@ final class shift_dates extends external_api {
                 VALUE_DEFAULT,
                 []
             ),
-            'includecourse' => new external_value(PARAM_BOOL,
-                'Also shift the course start and end date', VALUE_DEFAULT, false),
-            'includeavailability' => new external_value(PARAM_BOOL,
+            'includecourse' => new external_value(
+                PARAM_BOOL,
+                'Also shift the course start and end date',
+                VALUE_DEFAULT,
+                false
+            ),
+            'includeavailability' => new external_value(
+                PARAM_BOOL,
                 'Also shift access-restriction dates of sections and activities',
-                VALUE_DEFAULT, true),
-            'preservetimeofday' => new external_value(PARAM_BOOL,
+                VALUE_DEFAULT,
+                true
+            ),
+            'preservetimeofday' => new external_value(
+                PARAM_BOOL,
                 'Shift a whole-day offset as calendar days so the local time of day survives a '
                     . 'daylight-saving change; other offsets are always applied literally',
-                VALUE_DEFAULT, true),
-            'dryrun' => new external_value(PARAM_BOOL,
-                'Report the planned changes without writing them (default)', VALUE_DEFAULT, true),
+                VALUE_DEFAULT,
+                true
+            ),
+            'dryrun' => new external_value(
+                PARAM_BOOL,
+                'Report the planned changes without writing them (default)',
+                VALUE_DEFAULT,
+                true
+            ),
         ]);
     }
 
