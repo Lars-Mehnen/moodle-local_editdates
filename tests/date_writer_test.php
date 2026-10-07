@@ -27,14 +27,12 @@ namespace local_editdates;
 use local_editdates\local\availability;
 use local_editdates\local\date_collector;
 use local_editdates\local\date_writer;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for planning and applying date changes.
+ * @covers \local_editdates\local\date_writer
  */
-#[CoversClass(date_writer::class)]
 final class date_writer_test extends \advanced_testcase {
     /** @var \stdClass Course used by the tests. */
     private \stdClass $course;

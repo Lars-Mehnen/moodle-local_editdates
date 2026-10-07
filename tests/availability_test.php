@@ -25,14 +25,12 @@
 namespace local_editdates;
 
 use local_editdates\local\availability;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for availability date conditions.
+ * @covers \local_editdates\local\availability
  */
-#[CoversClass(availability::class)]
 final class availability_test extends \advanced_testcase {
     /**
      * An empty tree has no dates and is writable.

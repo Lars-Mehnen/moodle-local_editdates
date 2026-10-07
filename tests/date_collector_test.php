@@ -25,14 +25,12 @@
 namespace local_editdates;
 
 use local_editdates\local\date_collector;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for the course date read model.
+ * @covers \local_editdates\local\date_collector
  */
-#[CoversClass(date_collector::class)]
 final class date_collector_test extends \advanced_testcase {
     /** @var \stdClass Course used by the tests. */
     private \stdClass $course;

@@ -28,16 +28,16 @@ use core_external\external_api;
 use local_editdates\external\get_course_dates;
 use local_editdates\external\set_course_dates;
 use local_editdates\external\shift_dates;
-use PHPUnit\Framework\Attributes\CoversClass;
 
-defined('MOODLE_INTERNAL') || die();
 
-#[CoversClass(get_course_dates::class)]
-#[CoversClass(set_course_dates::class)]
+/**
+ * @covers \local_editdates\external\get_course_dates
+ * @covers \local_editdates\external\set_course_dates
+ */
 /**
  * Tests for the web service layer.
+ * @covers \local_editdates\external\shift_dates
  */
-#[CoversClass(shift_dates::class)]
 final class external_test extends \advanced_testcase {
     /** @var \stdClass Course used by the tests. */
     private \stdClass $course;
