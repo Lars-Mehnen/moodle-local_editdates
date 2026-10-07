@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'local_editdates';
 $plugin->release = '0.1.2';
 $plugin->version = 2026091602;
-$plugin->requires = 2026042001.00;
+$plugin->requires = 2024100700.00; // Moodle 4.5.0.
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [
     'report_editdates' => 2025072300,
